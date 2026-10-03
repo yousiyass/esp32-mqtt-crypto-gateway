@@ -11,7 +11,7 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 const char *ssid = "WiFi_name";
 const char *password = "WiFi_password";
 
-const char *mqtt_server = "pc_ip";
+const char *mqtt_server = "YOUR_MQTT_BROKER_IP";
 const int mqtt_port = 1883;
 
 WiFiClient espClient;
