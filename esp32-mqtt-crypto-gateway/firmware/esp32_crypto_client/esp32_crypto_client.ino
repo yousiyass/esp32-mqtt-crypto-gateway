@@ -21,13 +21,13 @@ int status = 1;
 
 void callback(char *topic, byte *payload, unsigned int length) {
   char incoming_price[50];
-  int long = length;
-  if (long > 49) { long = 49; }
+  int msg_len = length;
+  if (msg_len > 49) { msg_len = 49; }
 
-  for (int i = 0; i < long; i++) {
+  for (int i = 0; i < msg_len; i++) {
     incoming_price[i] = (char)payload[i];
   }
-  incoming_price[long] = '\0';
+  incoming_price[msg_len] = '\0';
 
   digitalWrite(LED, status);
   status = !status;
@@ -71,13 +71,12 @@ void setup() {
 }
 
 void loop() {
-  client.loop();
-
   if (WiFi.status() == WL_CONNECTED) {
     if (!client.connected()) {
       reconnect();
     }
 
+    client.loop();
 
     if (Serial.available() > 0) {
       lcd.clear();
