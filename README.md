@@ -3,10 +3,14 @@
 An end-to-end IoT crypto price telemetry system connecting an ESP32 hardware client with a Python backend service via MQTT.
 
 <p align="center">
-  <img src="esp32-mqtt-crypto-gateway/images/image_3.jpeg" width="320" />
-  <img src="esp32-mqtt-crypto-gateway/images/image_5.jpeg" width="320" />
+  <img src="esp32-mqtt-crypto-gateway/images/image_3.jpeg" width="200" />
+  <img src="esp32-mqtt-crypto-gateway/images/image_5.jpeg" width="200" />
 </p>
-<img src="esp32-mqtt-crypto-gateway/images/image_1.jpeg" width="260" /> | <img src="esp32-mqtt-crypto-gateway/images/image_2.jpeg" width="260" /> | <img src="esp32-mqtt-crypto-gateway/images/image_4.jpeg" width="260" />
+<p align="center">
+  <img src="esp32-mqtt-crypto-gateway/images/image_1.jpeg" width="200" />
+  <img src="esp32-mqtt-crypto-gateway/images/image_2.jpeg" width="200" />
+  <img src="esp32-mqtt-crypto-gateway/images/image_4.jpeg" width="200" />
+</p>
 
 ## Architecture
 
