@@ -17,7 +17,7 @@ def look_past():
 
     results = []
     for line in records:
-        sonuclar.append({
+        results.append({
             "id": line[0],
             "coin_name": line[1],
             "coin_price": line[2]
@@ -26,6 +26,6 @@ def look_past():
     conn.close()
 
     return {
-        "kayit_sayisi": toplam_adet,
-        "kayitlar": sonuclar
+        "record_count": total_quantity,
+        "records": results
     }
