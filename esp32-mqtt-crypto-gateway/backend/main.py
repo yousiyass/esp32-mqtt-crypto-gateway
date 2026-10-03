@@ -2,9 +2,6 @@ import sqlite3
 import paho.mqtt.client as mqtt
 import time
 import requests
-from fastapi import FastAPI
-
-app = FastAPI()
 
 conn = sqlite3.connect("crypto_telemetry.db", check_same_thread=False)
 cursor = conn.cursor()
@@ -44,7 +41,7 @@ def on_message(client, userdata, msg):
         conn.commit()
     except Exception as e:
         print("API error or incorrect coin input: ",e)
-        client.publish("error", "ERROR");
+        client.publish("error", "ERROR")
 
 client = mqtt.Client(client_id="python-crypto-gateway")
 
