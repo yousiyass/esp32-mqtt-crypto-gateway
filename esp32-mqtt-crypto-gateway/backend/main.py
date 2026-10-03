@@ -45,7 +45,7 @@ def on_message(client, userdata, msg):
 
 client = mqtt.Client(client_id="python-crypto-gateway")
 
-broker_ip = "pc_ip"
+broker_ip = "YOUR_MQTT_BROKER_IP"
 broker_port = 1883
 
 client.on_connect = on_connect
