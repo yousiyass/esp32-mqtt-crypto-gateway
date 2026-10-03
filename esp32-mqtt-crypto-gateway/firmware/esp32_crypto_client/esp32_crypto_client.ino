@@ -17,29 +17,29 @@ const int mqtt_port = 1883;
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-int durum = 1;
+int status = 1;
 
 void callback(char *topic, byte *payload, unsigned int length) {
-  char gelen_fiyat[50];
-  int uzunluk = length;
-  if (uzunluk > 49) { uzunluk = 49; }
+  char incoming_price[50];
+  int long = length;
+  if (long > 49) { long = 49; }
 
-  for (int i = 0; i < uzunluk; i++) {
-    gelen_fiyat[i] = (char)payload[i];
+  for (int i = 0; i < long; i++) {
+    incoming_price[i] = (char)payload[i];
   }
-  gelen_fiyat[uzunluk] = '\0';
+  incoming_price[long] = '\0';
 
-  digitalWrite(LED, durum);
-  durum = !durum;
+  digitalWrite(LED, status);
+  status = !status;
 
   lcd.setCursor(0, 1);
-  lcd.print(gelen_fiyat);
+  lcd.print(incoming_price);
 }
 
 void reconnect() {
   while (!client.connected()) {
-    if (client.connect("esp32")) {
-      Serial.println("Yaka kartimizla(esp32) giris yaptik. Dinleniyor...");
+    if (client.connect("esp32-crypto-client")) {
+      Serial.println("We logged in using our badge (esp32-crypto-client). Listening...");
       client.subscribe("coin/price");
     }
     else {
@@ -63,7 +63,7 @@ void setup() {
     Serial.print(".");
     delay(500);
   }
-  Serial.println("\nWiFi Agina Baglanildi!");
+  Serial.println("\nConnected to the WiFi network!");
 
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
@@ -83,18 +83,18 @@ void loop() {
       lcd.clear();
 
 
-      String gelen_coin = Serial.readStringUntil('\n');
-      gelen_coin.trim();
-      if (gelen_coin.length() > 0) {
-        gelen_coin.toUpperCase();
-        Serial.println(gelen_coin);
+      String incoming_coin = Serial.readStringUntil('\n');
+      incoming_coin.trim();
+      if (incoming_coin.length() > 0) {
+        incoming_coin.toUpperCase();
+        Serial.println(incoming_coin);
 
 
-        client.publish("coin/name", gelen_coin.c_str());
+        client.publish("coin/name", incoming_coin.c_str());
 
       
         lcd.setCursor(0, 0);
-        lcd.print(gelen_coin);
+        lcd.print(incoming_coin);
         lcd.print("USDT:");
       }
     }
