@@ -4,23 +4,23 @@ import sqlite3
 app = FastAPI()
 
 
-@app.get("/home")
-def gecmis():
-    conn = sqlite3.connect("python_son.db", check_same_thread=False)
+@app.get("/past")
+def look_past():
+    conn = sqlite3.connect("crypto_telemetry.db", check_same_thread=False)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT COUNT(*) FROM veriler")
-    toplam_adet = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(*) FROM data")
+    total_quantity = cursor.fetchone()[0]
 
-    cursor.execute("SELECT * FROM veriler ORDER BY id DESC")
-    kayitlar = cursor.fetchall()
+    cursor.execute("SELECT * FROM data ORDER BY id DESC")
+    records = cursor.fetchall()
 
-    sonuclar = []
-    for satir in kayitlar:
+    results = []
+    for line in records:
         sonuclar.append({
-            "id": satir[0],
-            "coin_name": satir[1],
-            "coin_price": satir[2]
+            "id": line[0],
+            "coin_name": line[1],
+            "coin_price": line[2]
         })
 
     conn.close()
