@@ -40,3 +40,6 @@ An end-to-end IoT crypto price telemetry system connecting an ESP32 hardware cli
 cd backend
 pip install fastapi uvicorn paho-mqtt requests
 python mqtt_gateway.py
+
+### Recent Updates
+* **JSON Payloads:** Migrated MQTT communication from raw strings to structured JSON format using the ArduinoJson library for more reliable data handling.
