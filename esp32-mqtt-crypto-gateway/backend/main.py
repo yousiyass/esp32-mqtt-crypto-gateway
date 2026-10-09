@@ -3,6 +3,8 @@ import paho.mqtt.client as mqtt
 import time
 import requests
 
+import json
+
 conn = sqlite3.connect("crypto_telemetry.db", check_same_thread=False)
 cursor = conn.cursor()
 
@@ -18,30 +20,33 @@ conn.commit()
 
 def on_connect(client, userdata, flags, reason_code, properties=None):
     print("Connected and listening...")
-
-    client.subscribe("coin/name")
+    client.subscribe("esp32/crypto/requests")
 
 def on_message(client, userdata, msg):
-    incoming_coin_name = msg.payload.decode("utf-8").strip()
     try:
-        symbol = incoming_coin_name + "USDT"
+        incoming_package = json.loads(msg.payload.decode("utf-8"))
+
+        coin_name = incoming_package["coin"]
+        symbol = coin_name + "USDT"
         url = f"https://api.binance.com/api/v3/ticker/price?symbol={symbol}"
 
-        response = requests.get(url)
-        data = response.json()
+        binance_response = requests.get(url).json()
+        coin_price = round(float(binance_response["price"]), 2)
 
-        coin_price = float(data["price"])
-        last_coin_price = round(coin_price, 2)
+        package = {"coin": coin_name, "price": coin_price}
+        json_package = json.dumps(package)
+        client.publish("esp32/crypto/response", json_package)
 
-        print(f"{incoming_coin_name}: {last_coin_price}")
+        print(json_package)
 
-        client.publish("coin/price", last_coin_price)
-
-        cursor.execute("INSERT INTO data (coin_name, coin_price) VALUES (?, ?)", (symbol, last_coin_price))
+        cursor.execute("INSERT INTO data (coin_name, coin_price) VALUES (?, ?)", (coin_name, coin_price))
         conn.commit()
-    except Exception as e:
-        print("API error or incorrect coin input: ",e)
-        client.publish("error", "ERROR")
+
+    except json.JSONDecodeError:
+        print("The package arrived defective or damaged.")
+    except KeyError:
+        print("Binance Coin not found or API error.")
+
 
 client = mqtt.Client(client_id="python-crypto-gateway")
 
@@ -61,12 +66,6 @@ try:
 except KeyboardInterrupt:
     client.loop_stop()
     client.disconnect()
-
-
-
-
-
-
 
 
 
